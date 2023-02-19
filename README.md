@@ -145,7 +145,7 @@ UNLOCK INSTANCE;
 #### 2) 테이블 락  
 `개별 테이블 단위로 설정되는 잠금이며, 명시적 또는 묵시적으로 락을 획득할 수 있다.`  
 
-***명시적 락***  
+##### 명시적 락
 명시적 락은 온라인 작업에 상당한 영향을 미치기 때문에 사용할 필요가 거의 없다.  
 ```
 획득
@@ -155,7 +155,7 @@ LOCK TABLES table_name [ READ | WRITE ]
 UNLOCK TABLES
 ```  
 
-***묵시적 락***  
+##### 묵시적 락
 MyISAM, MEMORY 테이블에 사용하며 쿼리가 실행되는 동안 자동으로 획득됐다가, 완료된 후 자동 해제된다.  
 InnoDB의 경우 스토리지 엔진 차원에서 레코드 기반의 잠금을 제공하기 때문에 단순 데이터 변경 쿼리로 인해 묵시적인 락이 설정되지는 않는다.  
 InnoDB 테이블에도 테이블 락이 설정되지만 데이터 변경 쿼리에서는 무시되고 스키마를 변경하는 DDL 에서만 적용된다.  
@@ -181,12 +181,13 @@ InnoDB 스토리지 엔진은 레코드 자체가 아니라 `인덱스의 레코
 인덱스가 없더라도 내부적으로 자동 생성된 클러스터 인덱스를 이용해 잠금을 설정한다.  
 
 ```
-employees테이블에 약 30만건의 데이터가 있고, 만약 first_name이 Georgi인 사원은 253명, 앞의 조건과 last_name이 Klassen인 사원은 단 1명만 존재한다고 가정해본다.  
+employees 테이블에 약 30만건의 데이터가 있고, 
+만약 first_name이 Georgi인 사원은 253명, 앞의 조건과 last_name이 Klassen인 사원은 단 1명만 존재한다고 가정해본다.  
 멤버로 담긴 ix_firstname이라는 인덱스가 준비되어있다고 가정해본다.
 KEY ix_firstname (first_name)
 
 UPDATE employees SET hire_date=NOW() WHERE first_name='Georgi' AND last_name='Klassen'
-위의 쿼리를 실행하게 된다면 first_name에 인덱스가 걸려 있기 때문에 253건의 레코드가 모두 잠길것이다.
+위의 쿼리를 실행하게 된다면 first_name에 인덱스가 걸려 있기 때문에 253건의 레코드가 모두 잠길것이다.  
 만약 인덱스가 없다면 30만건의 레코드가 전부 잠금에 걸릴 것이다.
 때문에 InnoDB에서 인덱스 설계가 중요한 것이다.
 ```
@@ -201,9 +202,7 @@ UPDATE employees SET hire_date=NOW() WHERE first_name='Georgi' AND last_name='Kl
 
 
 #### 6) 자동 증가 락
-AUTO_INCREMENT 컬럼이 사용된 테이블에 동시에 여러 레코드가 INSERT 되는 경우, 저장되는 각 레코드가 중복되지 않게   
-InnoDB 스토리지 엔진 내부에서 AUTO_INCREMENT 락 이라고 하는 테이블 수준의 잠금을 사용한다.  
-AUTO_INCREMENT 컬럼이 사용된 테이블에 동시에 여러 레코드가 INSERT 되는 경우, 저장되는 각 레코드가 중복되지 않게 InnoDB 스토리지 엔진 내부에서 AUTO_INCREMENT 락 이라고 하는 테이블 수준의 잠금을 사용한다.
+AUTO_INCREMENT 컬럼이 사용된 테이블에 동시에 여러 레코드가 INSERT 되는 경우, 저장되는 각 레코드가 중복되지 않게 InnoDB 스토리지 엔진 내부에서 AUTO_INCREMENT 락 이라고 하는 테이블 수준의 잠금을 사용한다.  
 INSERT, REPLACE 쿼리와 같이 새로운 레코드를 저장하는 경우에만 사용되며, UPDATE나 DELETE의 경우에는 걸리지 않는다.  
 트랜잭션과 상관없이 AUTO_INCREMENT 값을 가져오는 순간만 락이 걸렸다가 즉시 해제된다.  
 MySQL 5.1 이상부터는 innodb_autoinc_lock_mode라는 시스템 변수를 통해 작동방식 변경이 가능하다.  
