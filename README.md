@@ -38,7 +38,10 @@ heap 테이블이라 불리며 빠른 insert와 select 작업이 가능하다.
 즉 논리적인 작업 셋을 모두 완벽하게 처리하거나, 처리하지 못할 경우에는 원 상태로 복구해서 작업의 일부만 적용되는 현상이 발생하지 않게 만들어 주는 기능이다.  
 
 
-### 1. 트랜잭션의 설계  
+<details markdown="1">
+<summary> 
+
+#### ***1. 트랜잭션의 설계***  </summary>  
 
 트랜잭션은 꼭 필요한 최소의 코드에만 적용하는것이 좋다.  
 
@@ -96,11 +99,16 @@ db 커넥션은 개수가 제한적이어서 각 단위 프로그램이 커넥�
 
 10) 처리완료
 ```
+</details>
 
-##
 
 
-### 2. MySQL 엔진의 잠금  
+
+<details markdown="1">
+<summary> 
+
+#### ***2. MySQL 엔진의 잠금***  </summary>  
+
 MySQL에서의 잠금은 크게 `스토리지 엔진 레벨`과 `MySQL 엔진 레벨`로 나눌 수 있다.  
 스토리지 엔진을 제외한 나머지 부분이다.  
 
@@ -206,15 +214,18 @@ AUTO_INCREMENT 컬럼이 사용된 테이블에 동시에 여러 레코드가 IN
 INSERT, REPLACE 쿼리와 같이 새로운 레코드를 저장하는 경우에만 사용되며, UPDATE나 DELETE의 경우에는 걸리지 않는다.  
 트랜잭션과 상관없이 AUTO_INCREMENT 값을 가져오는 순간만 락이 걸렸다가 즉시 해제된다.  
 MySQL 5.1 이상부터는 innodb_autoinc_lock_mode라는 시스템 변수를 통해 작동방식 변경이 가능하다.  
+</details>
+
+
+##
 
 
 
+<details markdown="1">
+<summary> 
 
-
-
-
-
-### INDEX  
+#### ***INDEX***  </summary>  
+  
 
 ##### explain (실행계획)  
 
@@ -295,8 +306,19 @@ MYSQL 서버에서 쿼리를 처리하는 동안 중간 결과를 담아 두기 
 ```
 
 
+##
+
+`Using Where`  
+조인, 필터링, 집한처리,,, 등을 처리하는 MYSQL 엔진 레이어에서 별도의 가공을 통해 필터링(여과) 작업을 처리한 경우에 Extra 컬럼에 Using where 코멘트가 표시된다.  
 
 
+##
+
+`Zero limit`  
+데이터 값이 아닌 쿼리 결과값의 메타데이터만 필요한 경우 쿼리의 마지막에 LIMIT 0을 사용하면 Zero limit 메시지가 출력된다.  
+
+
+</details>
 
 
 
