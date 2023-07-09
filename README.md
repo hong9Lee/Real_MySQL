@@ -227,25 +227,47 @@ MySQL 5.1 이상부터는 innodb_autoinc_lock_mode라는 시스템 변수를 통
 #### ***INDEX***  </summary>  
   
 
-##### explain (실행계획)  
+### Explain (실행계획)  
+MYSQL 옵티마이저가 수립한 실행 계획의 큰 흐름을 보여준다.  
+
+
+##
+
+###### select_type 컬럼  
+각 단위 SELECT 쿼리가 어떤 타입의 쿼리인지 표시되는 컬럼이다.  
+
+`SIMPLE`  
+UNION이나 서브쿼리를 사용하지 않는 단순한 SELECDT 쿼리의 경우 SIMPLE이 표시됨.  
+쿼리가 복잡하더라도 SIMPLE인 단위 쿼리는 하나만 존재한다.  
+일반적으로 제일 바깥 SELECT 쿼리의 select_type이 SIMPLE로 표시됨.  
+
+`PRIMARY`  
+UNION이나 서브쿼리를 가지는 SELECT 쿼리의 가장 바깥쪽에 있는 단위 쿼리는 PRIMARY로 표시된다.  
+PRIMARY인 단위 쿼리는 하나만 존재한다.  
+
+`UNION`  
+UNION으로 결합하는 단위 SELECT 쿼리 가운데 첫 번째를 제외한 두 번째 이후 단위 SELECT 쿼리의 select_type은 UNION으로 표시됨.  
+첫번째 단위는 UNION되는 쿼리 결과들을 모아서 저장하는 임시 테이블(DERIVED)가 표시됨.  
 
 
 
 
--> rows 컬럼  
+##
+
+###### rows 컬럼  
 옵티마이저 실행 계획의 효율성 판단을 위해 예측했던 레코드 건수를 보여준다.  
 rows 컬럼에 표시되는 값은 반환하는 레코드의 예측치가 아니라, 쿼리를 처리하기 위해 얼마나 많은 레코드를 읽고 체크해야 하는지를 의미한다.  
 
 ##
 
 
--> extra 컬럼  
+###### Extra 컬럼  
 쿼리의 실행 계획에서 성능에 관련된 내용이 표시된다.  
 쿼리 실행에 있어 OO을 더 실행하겠다. 라는 내용이기에 NULL이 제일 좋다.  
 
 
 
-##  
+
 `Using filesort`  
 ORDER BY 처리가 인덱스를 사용하지 못할 때만 실행 계획의 Extra 컬럼에 Using filesort 코멘트가 표시된다.  
 이는 조회된 레코드를 정렬용 메모리 버퍼에 복사해 퀵 소트 또는 힙 소트 알고리즘을 이용해 정렬을 수행하게 된다는 의미이다.  
