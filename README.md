@@ -249,6 +249,23 @@ PRIMARY인 단위 쿼리는 하나만 존재한다.
 UNION으로 결합하는 단위 SELECT 쿼리 가운데 첫 번째를 제외한 두 번째 이후 단위 SELECT 쿼리의 select_type은 UNION으로 표시됨.  
 첫번째 단위는 UNION되는 쿼리 결과들을 모아서 저장하는 임시 테이블(DERIVED)가 표시됨.  
 
+`DEPENDENT UNION`  
+UNION이나 UNION ALL로 집합을 결합하는 쿼리에서 표시된다.  
+DEPENDENT는 UNION이나 UNION ALL로 결합된 단위 쿼리가 외부 쿼리에 의해 영향을 받는 것을 의미한다.  
+
+ex)  
+EXPLAIN  
+SELECT *  
+FROM employees e1 WHERE e1.emp_no IN (  
+  SELECT e2.emp)no FROM employees e2 WHERE e2.first_name='Matt'    
+  UNION  
+  SELECT e3.emp_no FROM employees e3 WHERE e3.last_name='Matt'  
+);  
+
+`UNION RESULT`  
+UNION RESULT는 UNION 결과를 담아두는 테이블을 의미한다.  
+select_type이 UNION RESULT인 경우 EXPLAIN table 컬럼에는 <union1, 2>와 같은 값이 출력된다.  
+이는 explain의 id 1, 2의 조회 결과를 UNION 했다는 것을 의미한다.  
 
 
 
