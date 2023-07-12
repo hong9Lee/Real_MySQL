@@ -267,6 +267,29 @@ UNION RESULT는 UNION 결과를 담아두는 테이블을 의미한다.
 select_type이 UNION RESULT인 경우 EXPLAIN table 컬럼에는 <union1, 2>와 같은 값이 출력된다.  
 이는 explain의 id 1, 2의 조회 결과를 UNION 했다는 것을 의미한다.  
 
+##
+
+###### partitions 컬럼  
+
+,,,  
+PARTITION BY RANGE COLUMNS(hire_date)  
+(PARTITION p1986_1990 VALUES LESS THAN ('1990-01-01'),  
+PARTITION p1991_1995 VALUES LESS THAN ('1996-01-01'),  
+PARTITION p1996_2000 VALUES LESS THAN ('2000-01-01'),  
+PARTITION p2001_2005 VALUES LESS THAN ('2006-01-01'));  
+
+EXPLAIN  
+SELECT *  
+FROM employees  
+WHERE hire_date BETWEEN '1995-11-15' AND '2000-01-15';  
+  
+위와 같은 경우, explain의 partitions 컬럼에는 p1996_2000, p2001_2005라고 표현되며 type에는 ALL이라고 표기된다.  
+왜 풀스캔(ALL)으로 표현될까?  
+MYSQL에서 지원하는 파티션은 물리적으로 개별 테이블처럼 별도의 저장공간을 가지기 때문이다.  
+이 쿼리의 경우 모든 파티션이 아니라 p1996_2000, p2001_2005 파티션만 풀 스캔한다는 의미이다.  
+
+
+
 
 
 ##
