@@ -334,6 +334,16 @@ ref 타입은 반환되는 레코드가 반드시 1건이라는 보장이 없으
 세 가지 모두 매우 좋은 접근 방법으로 인덱스의 분포도가 나쁘지 않다면 성능상의 문제를 일으키지 않는 접근 방법이다.  
 쿼리를 튜닝할때 이 세가지 접근 방법에 대해서는 크게 신경 쓰지 않고 넘어가도 무방하다.  
 
+`fulltext`  
+MYSQL 서버의 전문 검색 인덱스를 사용해 레코드를 읽는 접근 방법을 의미한다.  
+"MATCH(...) AGAINST(...)" 구문을 사용해서 실행하는데, 이때 반드시 해당 테이블에 전문 검색용 인덱스가 준비돼 있어야만 한다.  
+인덱스 생성 -> FULLTEXT KEY fx_name (first_name, last_name) WITH PARSER ngram  
+검색 -> MATCH(first_name, last_name) AGAINST('Facello' IN BOOLEAN MODE);  
+
+`ref_or_null`  
+ref 접근방법에 NULL 비교가 추가된 형태다.  
+나쁘지 않은 접근 방법이다.  
+
 
 
 
