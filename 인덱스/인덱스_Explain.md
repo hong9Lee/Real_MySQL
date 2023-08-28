@@ -1,5 +1,6 @@
-<details markdown="1">
-<summary> 
+## ***인덱스 실행계획***
+
+##
 
 #### ***INDEX***  </summary>
 
@@ -76,19 +77,20 @@ MYSQL에서 지원하는 파티션은 물리적으로 개별 테이블처럼 별
 
 ###### type 컬럼
 type 컬럼은 MYSQL 서버가 각 테이블의 레코드를 어떤 방식으로 읽었는지를 나타낸다. (인덱스를 사용했는지, 풀스캔을 했는지)
-
-system  
-const  
-eq_ref  
-ref  
-fulltext  
-ref_or_null  
-unique_subquery  
-index_subquery  
-range  
-index_merge  
-index  
+`  
+system,  
+const,  
+eq_ref,  
+ref,  
+fulltext,  
+ref_or_null,  
+unique_subquery,  
+index_subquery,  
+range,  
+index_merge,  
+index,  
 ALL
+`
 
 ALL을 제외한 나머지는 모두 인덱스를 사용하여 접근하는 방법이다.  
 `하나의 단위 SELECT 쿼리는 단 하나만 사용 가능하다.`  
@@ -226,7 +228,7 @@ MYSQL 서버에서 쿼리를 처리하는 동안 중간 결과를 담아 두기 
 데이터 값이 아닌 쿼리 결과값의 메타데이터만 필요한 경우 쿼리의 마지막에 LIMIT 0을 사용하면 Zero limit 메시지가 출력된다.
 
 
-</details>
+
 
 
 
