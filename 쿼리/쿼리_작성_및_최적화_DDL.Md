@@ -54,7 +54,33 @@ MYSQL 8.0 부터 테이블의 컬럼 추가 작업은 대부분 INPLACE 알고�
 - 컬럼 타입의 길이를 줄이는 경우 COPY를 사용하며 LOCK은 SHARED로 사용되어야 한다.
 
 
+## `인덱스 이름 변경`  
+인덱스 이름 변경하는 작업은 INPLACE 알고리즘을 사용하지만 실제 테이블 리빌드를 필요로 하지 않는다.  
+```
+ALTER TABLE employees
+ADD INDEX index_new (first_name, last_name)
+ALGORITHM=INPLACE, LOCK=NONE;
 
+ALTER TABLE employees
+DROP INDEX ix_firstname,
+RENAME INDEX index_new TO ix_firstname,
+ALGORITHM=INPLACE, LOCK=NONE;
+```
+
+## `인덱스 가시성 변경`  
+인덱스의 가시성이란 MYSQL 서버가 쿼리 실행할 때 해당 인덱스를 사용할 수 있게 할지 말지를 결정하는 것이다.  
+```
+ALTER TABLE employees ALTER INDEX ix_firstname INVISIBLE;
+```
+
+## `인덱스 삭제`  
+세컨더리 인덱스 삭제 작업은 INPLACE 알고리즘을 사용하지만 실제 테이블 리빌드를 필요로 하지 않는다.  
+하지만, 프라이머리 키 삭제 작업은 모든 세컨더리 인덱스의 리프 노드에 저장된 프라이머리 키 값을 삭제해야 하기 때문에 임시 테이블로 레코드를 복사해서 테이블을 재구축 해야한다.  
+프라이머리 키 삭제는 COPY 알고리즘을 사용해야하며, 키 삭제 도중 레코드 쓰기는 불가능한 SHARED 모드의 잠금이 필요하다는 것을 확인할 수 있다.  
+```
+ALTER TABLE employees DROP PRIMARY KEY, ALGORITHM=COPY, LOCK=SHARED;
+ALTER TABLE employees DROP INDEX ux_empno, ALGORITHM=INPLACE, LOCK=NONE;
+```
 
 
 
